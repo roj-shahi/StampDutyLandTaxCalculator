@@ -1,20 +1,69 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<main role="main" class="container">
+  <div class="content">
+    
+    <div class="row justify-content-md-center">
+      <div class="col-md-8">
+        <h1 class="mb-4">Stamp Duty Land Tax Calculator</h1>
+        <form>
+          <div class="col-12">
+            <div class="form-group">
+              <label>Purchase Type:</label>
+              <select [(ngModel)]="purchaseType" name="purchaseType" class="form-control form-control-lg" placeholder="Enter text to translate">
+                <option value="">Select</option>
+                <option value="First Time Buyer">First Time Buyer</option>
+                <option value="Home Mover">Home Mover</option>
+                <option value="Additional Property">Additional Property</option>
+              </select>
+            </div>
+            <div class="form-group">
+                <label>House Value (&pound;):</label>
+                <input [(ngModel)]="price" name="price" type="number" class="form-control form-control-lg" placeholder="Enter house value" [min]="300000" />
+                <small class="text-muted m-0">Minimum {{ '300000' | currency: 'GBP' }}</small>
+            </div>
+            <div class="form-group">
+                <button type="submit" [disabled]="!(price >= 300000 && purchaseType?.length)" class="btn btn-primary" (click)="calculate()">Calculate</button>
+            </div>
 
+            <div class="result mt-5" *ngIf="results">
+              <h2>Result</h2>
+              <p class="lead">
+                Stamp Duty to pay is: <strong>{{ results.totalTaxAmount | currency:'GBP' }}</strong>
+              <p>
+                Purchase Type: {{ results.purchaseType }} <br />
+                House Value : {{ results.price | currency:'GBP' }}
+              </p>
+              <hr />
+              <h5 class="text-muted">Breakdown</h5>
+              <p *ngFor="let result of results.breakdown" class="breakdown text-muted">
+                <span *ngIf="result.taxableAmount">{{ result.taxPercent }}% on the {{ result.taxableAmount | currency:'GBP' }} = {{ result.taxAmount | currency:'GBP' }}</span>
+              </p>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-md-4 mt-4">
+          <div class="card mt-5" style="width: 18rem;">
+            <div class="card-header font-weight-bold">
+              Stamp Duty
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item" *ngIf="resultsHistory.length == 0">
+                No entries found.
+              </li>
+              <li class="list-group-item text-left" *ngFor="let history of resultsHistory?.slice().reverse();">
+                <h6 class="m-0">{{ history.totalTaxAmount | currency:'GBP' }}</h6>
+                <small class="text-muted m-0">
+                  Purchase Type: {{ history.purchaseType }} <br />
+                  House Value : {{ history.price | currency:'GBP' }}
+                </small>
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</main><!-- /.container -->
