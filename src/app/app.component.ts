@@ -117,11 +117,6 @@ export class AppComponent {
         break;
       } else {
         // if the price is greater than the rule
-        // portion = result.toAmount - portion;
-        // result.taxableAmount = portion;
-        // result.taxAmount = portion * result.taxPercent / 100;
-        // taxAmount = taxAmount + result.taxAmount;
-        // portion = result.toAmount;
         result.taxableAmount = result.toAmount - portion;
         result.taxAmount = result.taxableAmount * result.taxPercent / 100;
         totalTaxAmount = totalTaxAmount + result.taxAmount;
