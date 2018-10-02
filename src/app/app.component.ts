@@ -6,8 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 
-
-
 export class AppComponent {
   purchaseType: string = '';
   price: number = null;
@@ -109,27 +107,31 @@ export class AppComponent {
 
   buildTaxResult(price, results): void {
     let portion: number = 0;
-    let taxAmount: number = 0;
+    let totalTaxAmount: number = 0;
     for (const result of results) {
       if (price >= result.fromAmount && price <= result.toAmount) {
         // when the price matches the rule
         result.taxableAmount = price - portion;
         result.taxAmount = result.taxableAmount * result.taxPercent / 100;
-        taxAmount = taxAmount + result.taxAmount;
+        totalTaxAmount = totalTaxAmount + result.taxAmount;
         break;
       } else {
         // if the price is greater than the rule
-        portion = result.toAmount - portion;
-        result.taxableAmount = portion;
-        result.taxAmount = portion * result.taxPercent / 100;
-        taxAmount = taxAmount + result.taxAmount;
+        // portion = result.toAmount - portion;
+        // result.taxableAmount = portion;
+        // result.taxAmount = portion * result.taxPercent / 100;
+        // taxAmount = taxAmount + result.taxAmount;
+        // portion = result.toAmount;
+        result.taxableAmount = result.toAmount - portion;
+        result.taxAmount = result.taxableAmount * result.taxPercent / 100;
+        totalTaxAmount = totalTaxAmount + result.taxAmount;
         portion = result.toAmount;
       }
     }
     this.results = {
       'purchaseType': this.purchaseType,
       'price': this.price,
-      'totalTaxAmount': taxAmount,
+      'totalTaxAmount': totalTaxAmount,
       'breakdown': results
     };
     this.resultsHistory.push(this.results);
